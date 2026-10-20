@@ -1,0 +1,44 @@
+{
+  "name": "training-rl",
+  "version": "0.1.0",
+  "description": "RL（GRPO）薄插件：规则奖励（显式版本）→ β 可推导（β=σ_r/KL*，σ_r 实测）→ training-core 单体档位驱动 TRL GRPOTrainer → 产物级断言 → 合并 → serving 部署 → 偏好对齐 + 遗忘门禁。依赖长任务 1 冻结的六个 @ai-infra/* 共享库。",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.mjs",
+  "bin": { "training-rl": "./bin/training-rl.mjs" },
+  "exports": {
+    ".": { "default": "./src/index.mjs" },
+    "./tools": { "default": "./src/tools.mjs" },
+    "./reward": { "default": "./src/reward.mjs" },
+    "./package.json": "./package.json"
+  },
+  "files": ["src", "bin", "mcp", "python", "skills", "manifest.yaml", "cordis.patch.yml"],
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "@ai-infra/testing-core": "file:../shared/libs/testing-core",
+    "@ai-infra/data-core": "file:../shared/libs/data-core",
+    "@ai-infra/state-core": "file:../shared/libs/state-core",
+    "@ai-infra/audit-core": "file:../shared/libs/audit-core",
+    "@ai-infra/sandbox-core": "file:../shared/libs/sandbox-core",
+    "@ai-infra/training-core": "file:../shared/libs/training-core"
+  },
+  "optionalDependencies": {
+    "torch": ">=2.0.0 <3",
+    "transformers": ">=4.40.0 <6",
+    "trl": ">=1.0.0 <2",
+    "accelerate": ">=0.30.0 <2",
+    "peft": ">=0.10.0 <1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": ">=0.0.1-rc <2",
+    "cordis": ">=4.0.0-rc <5"
+  },
+  "scripts": {
+    "test": "node tests/run.mjs",
+    "test:unit": "node tests/run.mjs",
+    "test:contract": "node ../inference-contracts/checks/run-all.mjs",
+    "reward-vectors": "node tests/gen-reward-vectors.mjs",
+    "health": "node bin/training-rl.mjs health"
+  },
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" } }
+}

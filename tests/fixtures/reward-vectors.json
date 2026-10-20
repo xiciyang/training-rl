@@ -1,0 +1,414 @@
+{
+  "schema": "training-rl/reward-vectors@1",
+  "rewardVersion": "rule-reward@1",
+  "note": "由 tests/gen-reward-vectors.mjs 从 JS 权威实现生成；JS 单测与容器内 Python 实现都必须逐条相符。",
+  "branches": [
+    "readable-empty",
+    "readable-whitespace",
+    "readable-symbols-only",
+    "readable-ok",
+    "restart-instruction",
+    "restart-input",
+    "restart-too-long",
+    "restart-ok",
+    "repetition-degenerate",
+    "repetition-ok",
+    "length-zero",
+    "length-short",
+    "length-band-low",
+    "length-band-mid",
+    "length-band-high",
+    "length-too-long",
+    "relevance-full",
+    "relevance-partial",
+    "relevance-zero",
+    "relevance-no-content-words",
+    "constraint-one-word-ok",
+    "constraint-one-word-violated",
+    "constraint-number-ok",
+    "constraint-number-violated",
+    "constraint-json-ok",
+    "constraint-json-violated",
+    "constraint-absent-neutral"
+  ],
+  "vectors": [
+    {
+      "branch": "readable-empty",
+      "prompt": "Explain gravity.",
+      "completion": "",
+      "expected": 0.16666666666666666,
+      "parts": {
+        "readable": 0,
+        "no_restart": 0,
+        "length": 0,
+        "repetition": 1,
+        "relevance": 0,
+        "constraint": 0
+      }
+    },
+    {
+      "branch": "readable-whitespace",
+      "prompt": "Explain gravity.",
+      "completion": "   \n\t  ",
+      "expected": 0.16666666666666666,
+      "parts": {
+        "readable": 0,
+        "no_restart": 0,
+        "length": 0,
+        "repetition": 1,
+        "relevance": 0,
+        "constraint": 0
+      }
+    },
+    {
+      "branch": "readable-symbols-only",
+      "prompt": "Explain gravity.",
+      "completion": "... --- ***",
+      "expected": 0.3333333333333333,
+      "parts": {
+        "readable": 0,
+        "no_restart": 1,
+        "length": 0,
+        "repetition": 1,
+        "relevance": 0,
+        "constraint": 0
+      }
+    },
+    {
+      "branch": "readable-ok",
+      "prompt": "Explain gravity.",
+      "completion": "Gravity pulls masses toward each other.",
+      "expected": 0.9166666666666666,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 1,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "restart-instruction",
+      "prompt": "Explain gravity.",
+      "completion": "### Instruction:\nExplain gravity.",
+      "expected": 0.75,
+      "parts": {
+        "readable": 1,
+        "no_restart": 0,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 1,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "restart-input",
+      "prompt": "Explain gravity.",
+      "completion": "### Input:\nsomething about gravity",
+      "expected": 0.75,
+      "parts": {
+        "readable": 1,
+        "no_restart": 0,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 1,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "restart-too-long",
+      "prompt": "Explain gravity.",
+      "completion": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "expected": 0.47222222222222215,
+      "parts": {
+        "readable": 1,
+        "no_restart": 0,
+        "length": 0.3333333333333333,
+        "repetition": 1,
+        "relevance": 0,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "restart-ok",
+      "prompt": "Explain gravity.",
+      "completion": "Gravity is a force of attraction between masses.",
+      "expected": 0.9166666666666666,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 1,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "repetition-degenerate",
+      "prompt": "Explain gravity.",
+      "completion": "the same three words the same three words the same three words the same three words",
+      "expected": 0.6944444444444445,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 0.6666666666666667,
+        "relevance": 0,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "repetition-ok",
+      "prompt": "Explain gravity.",
+      "completion": "Gravity keeps the planets in orbit around the sun.",
+      "expected": 0.9166666666666666,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 1,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "length-zero",
+      "prompt": "Explain gravity.",
+      "completion": "###",
+      "expected": 0.3333333333333333,
+      "parts": {
+        "readable": 0,
+        "no_restart": 1,
+        "length": 0,
+        "repetition": 1,
+        "relevance": 0,
+        "constraint": 0
+      }
+    },
+    {
+      "branch": "length-short",
+      "prompt": "Explain gravity.",
+      "completion": "Gravity.",
+      "expected": 0.8055555555555557,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 0.3333333333333333,
+        "repetition": 1,
+        "relevance": 1,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "length-band-low",
+      "prompt": "Explain gravity.",
+      "completion": "Gravity attracts two masses.",
+      "expected": 0.9166666666666666,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 1,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "length-band-mid",
+      "prompt": "Explain gravity.",
+      "completion": "Gravity is a fundamental interaction that attracts any two masses toward each other.",
+      "expected": 0.9166666666666666,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 1,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "length-band-high",
+      "prompt": "Explain gravity.",
+      "completion": "w0 w1 w2 w3 w4 w5 w6 w7 w8 w9 w10 w11 w12 w13 w14 w15 w16 w17 w18 w19 w20 w21 w22 w23 w24 w25 w26 w27 w28 w29 w30 w31 w32 w33 w34 w35 w36 w37 w38 w39 w40 w41 w42 w43 w44 w45 w46 end",
+      "expected": 0.75,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 0,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "length-too-long",
+      "prompt": "Explain gravity.",
+      "completion": "w0 w1 w2 w3 w4 w5 w6 w7 w8 w9 w10 w11 w12 w13 w14 w15 w16 w17 w18 w19 w20 w21 w22 w23 w24 w25 w26 w27 w28 w29 w30 w31 w32 w33 w34 w35 w36 w37 w38 w39 w40 w41 w42 w43 w44 w45 w46 w47 w48 w49 w50 w51 w52 w53 w54 w55 w56 w57 w58 w59 w60 w61 w62 w63 w64 w65 w66 w67 w68 w69 w70 w71 w72 w73 w74 w75 w76 w77 w78 w79 w80 w81 w82 w83 w84 w85 w86 w87 w88 w89 w90 w91 w92 w93 w94 w95",
+      "expected": 0.5833333333333334,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 0,
+        "repetition": 1,
+        "relevance": 0,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "relevance-full",
+      "prompt": "Explain gravity and orbital mechanics.",
+      "completion": "Gravity and orbital mechanics explain why planets stay in orbit.",
+      "expected": 0.9166666666666666,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 1,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "relevance-partial",
+      "prompt": "Explain gravity and orbital mechanics.",
+      "completion": "Gravity is a fundamental interaction between masses.",
+      "expected": 0.8425925925925926,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 0.5555555555555556,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "relevance-zero",
+      "prompt": "Explain gravity and orbital mechanics.",
+      "completion": "Bananas are yellow and ripe in summer.",
+      "expected": 0.75,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 0,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "relevance-no-content-words",
+      "prompt": "to be or not to be",
+      "completion": "That is the question asked by many.",
+      "expected": 0.8333333333333334,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 0.5,
+        "constraint": 0.5
+      }
+    },
+    {
+      "branch": "constraint-one-word-ok",
+      "prompt": "Answer in one word: what color is the sky?",
+      "completion": "Blue",
+      "expected": 0.7222222222222223,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 0.3333333333333333,
+        "repetition": 1,
+        "relevance": 0,
+        "constraint": 1
+      }
+    },
+    {
+      "branch": "constraint-one-word-violated",
+      "prompt": "Answer in one word: what color is the sky?",
+      "completion": "The sky is blue today",
+      "expected": 0.8055555555555555,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 0.8333333333333334,
+        "constraint": 0
+      }
+    },
+    {
+      "branch": "constraint-number-ok",
+      "prompt": "What is 2+2? Answer with a number.",
+      "completion": "The answer is 4.",
+      "expected": 0.9166666666666666,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 0.5,
+        "constraint": 1
+      }
+    },
+    {
+      "branch": "constraint-number-violated",
+      "prompt": "What is 2+2? Answer with a number.",
+      "completion": "The answer is four.",
+      "expected": 0.75,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 0.5,
+        "constraint": 0
+      }
+    },
+    {
+      "branch": "constraint-json-ok",
+      "prompt": "Return the result as json.",
+      "completion": "{\"answer\": 4}",
+      "expected": 0.7777777777777777,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 0.6666666666666666,
+        "repetition": 1,
+        "relevance": 0,
+        "constraint": 1
+      }
+    },
+    {
+      "branch": "constraint-json-violated",
+      "prompt": "Return the result as json.",
+      "completion": "The result is four.",
+      "expected": 0.8333333333333334,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 1,
+        "constraint": 0
+      }
+    },
+    {
+      "branch": "constraint-absent-neutral",
+      "prompt": "Describe the water cycle in a few sentences.",
+      "completion": "Water evaporates, condenses into clouds and falls back as rain.",
+      "expected": 0.8425925925925926,
+      "parts": {
+        "readable": 1,
+        "no_restart": 1,
+        "length": 1,
+        "repetition": 1,
+        "relevance": 0.5555555555555556,
+        "constraint": 0.5
+      }
+    }
+  ]
+}

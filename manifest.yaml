@@ -1,0 +1,127 @@
+# 能力清单（安全声明）—— training-rl（长任务 3 · 阶段 3）
+#
+# 语义：本清单是**白名单**。未声明的 capability 一律视为"未声明所以拒绝"，
+# 与"设计上不做"（not_provided）显式区分。
+#
+# 风险档沿用推理三插件与 training-sft/pretrain 已固化的词表（同一台机器只应有一套）：
+#   read   = R0/R1 只读，无沙箱要求，不需要确认令牌
+#   write  = R1/R2 写操作，需沙箱（train/validate 声明 container；本机 process 层策略上降级到容器）
+#   system = R4 系统级，需 VM 级沙箱 —— 本机无 VM，故一律拒绝
+
+name: @xiciyang/training-rl
+version: 0.1.0
+interface:
+  mcp: "1.0.0"
+  cli: "1.0.0"
+
+capabilities:
+  - id: prepare
+    tool: training_rl_prepare
+    risk: write
+    sandbox: none
+    idempotent: true
+    confirmation: not-required
+    resources: ['disk:write', 'state:read']
+  - id: train
+    tool: training_rl_train
+    risk: write
+    sandbox: container
+    idempotent: false
+    confirmation: required
+    resources: ['gpu:write', 'disk:write', 'state:write', 'model:read']
+  - id: validate
+    tool: training_rl_validate
+    risk: write
+    sandbox: container
+    idempotent: false
+    confirmation: required
+    resources: ['gpu:write', 'port:bind', 'state:write', 'model:read']
+  - id: rollback
+    tool: training_rl_rollback
+    risk: write
+    sandbox: none
+    idempotent: true
+    confirmation: required
+    resources: ['disk:write', 'state:write']
+  - id: get_report
+    tool: training_rl_get_report
+    risk: read
+    sandbox: none
+    idempotent: true
+    confirmation: not-required
+    resources: ['state:read']
+  - id: health
+    tool: training_rl_health
+    risk: read
+    sandbox: none
+    idempotent: true
+    confirmation: not-required
+    resources: []
+
+not_provided:
+  - id: preference_datasets
+    reason: |
+      硬性不做：偏好对数据集在 v0 一律不引入。Step 0 只读探测实测（[verified]）：
+      `Anthropic/hh-rlhf` 卡片正文限定用途（"not meant for supervised training of dialogue agents"、
+      red-team 子集"not meant for fine-tuning or preference modeling"）；
+      `Dahoas/rm-static` **完全未声明 license**（无 license 字段、无 license:* tag）。
+      ⇒ 奖励来源固定为**规则函数**（kind=rule，带显式版本号），0 GPU 小时、逐位确定性。
+  - id: reward_model
+    reason: 同上 —— 本地模型根目录下无任何 reward model，且偏好数据路径因 license 关闭。
+  - id: ppo
+    reason: TRL 1.x **没有 PPOTrainer**（1.x 起移除）。本包用 GRPOTrainer（组相对策略优化）。
+  - id: qat
+    reason: 不做 QAT；训练全程 BF16 + LoRA，不引入任何量化步骤。
+  - id: distributed_training
+    reason: v0 不做分布式（DDP/FSDP/TP/PP）；并发恒为 1。
+  - id: modify_base_model
+    reason: 基座模型只读（同时充当 KL 锚点 reference）；LoRA 权重与合并产物一律写到独立运行目录。
+  - id: reference_model_writes
+    reason: |
+      硬性不做：reference（KL 锚点）在整轮训练中**哈希不变**（training-rl-contract 冻结条件 1）。
+      本包 reference = policy 的起点权重，加载一次 + 哈希冻结；训练只写 LoRA adapter。
+  - id: synthesize_data
+    reason: |
+      硬性不做：不自行合成训练数据，也不合成偏好对。
+      RL 的 prompt 一律来自**已被 data-core 校验过去泄漏**的既有数据集切分
+      （`train.jsonl` 作训练 prompt、`heldout.jsonl` 作评估 prompt），交集必须为空。
+  - id: sanitize_data
+    reason: 硬性不做：本包不接触原始语料，不做任何"自行脱敏后继续"的动作。
+  - id: touch_existing_endpoints
+    reason: validate 只创建并拆解**自己租用**的端点；存量端点一律只读，绝不触碰。
+  - id: system_level_change
+    reason: 不改宿主 OS/驱动/内核；vm 沙箱本机不可用，系统级动作一律拒绝。
+
+dependencies:
+  - name: inference-serving
+    via: mcp
+    purpose: validate 阶段的端点生命周期（deploy/teardown）、加载器可用性探针与**判定仪器**
+    required: true
+  - name: "@ai-infra/training-core"
+    via: internal
+    purpose: 公共训练循环**单体档位**（createMonolithicLoop）/ 限额 / checkpoint / 产物级断言 / 审计钩子
+    required: true
+  - name: "@ai-infra/testing-core"
+    via: internal
+    purpose: 双重门禁与测量判据（ε 推导 / 相对变化 / 均匀签名 / 困惑度 / 浮点指纹）
+    required: true
+  - name: "@ai-infra/data-core"
+    via: internal
+    purpose: prompt 集内容哈希 / 去泄漏闸门 / 血缘
+    required: true
+  - name: "@ai-infra/state-core"
+    via: internal
+    purpose: rl-registry 方言与乐观并发写
+    required: true
+  - name: "@ai-infra/audit-core"
+    via: internal
+    purpose: RL 审计哈希链（含每步 KL 与奖励记账号）
+    required: true
+  - name: "@ai-infra/sandbox-core"
+    via: internal
+    purpose: 沙箱层级行为探测与降级策略
+    required: true
+
+host:
+  node: ">=20.11.0"
+  runtimeDependencies: 0

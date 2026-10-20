@@ -1,0 +1,75 @@
+{
+  "name": "@xiciyang/training-rl",
+  "version": "0.1.0",
+  "description": "RL（GRPO）薄插件：规则奖励（显式版本）→ β 可推导（β=σ_r/KL*，σ_r 实测）→ training-core 单体档位驱动 TRL GRPOTrainer → 产物级断言 → 合并 → serving 部署 → 偏好对齐 + 遗忘门禁。依赖长任务 1 冻结的六个 @ai-infra/* 共享库。",
+  "type": "module",
+  "main": "./src/index.mjs",
+  "bin": {
+    "training-rl": "./bin/training-rl.mjs"
+  },
+  "exports": {
+    ".": {
+      "default": "./src/index.mjs"
+    },
+    "./tools": {
+      "default": "./src/tools.mjs"
+    },
+    "./reward": {
+      "default": "./src/reward.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "bin",
+    "mcp",
+    "python",
+    "skills",
+    "manifest.yaml",
+    "cordis.patch.yml"
+  ],
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "@xiciyang/audit-core": "0.0.x",
+    "@xiciyang/data-core": "0.0.x",
+    "@xiciyang/sandbox-core": "0.0.x",
+    "@xiciyang/state-core": "0.0.x",
+    "@xiciyang/testing-core": "0.0.x",
+    "@xiciyang/training-core": "0.0.x"
+  },
+  "optionalDependencies": {
+    "torch": ">=2.0.0 <3",
+    "transformers": ">=4.40.0 <6",
+    "trl": ">=1.0.0 <2",
+    "accelerate": ">=0.30.0 <2",
+    "peft": ">=0.10.0 <1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": ">=0.0.1-rc <2",
+    "cordis": ">=4.0.0-rc <5"
+  },
+  "scripts": {
+    "test": "node tests/run.mjs",
+    "test:unit": "node tests/run.mjs",
+    "test:contract": "node ../inference-contracts/checks/run-all.mjs",
+    "reward-vectors": "node tests/gen-reward-vectors.mjs",
+    "health": "node bin/training-rl.mjs health"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "dsh"
+  ],
+  "engines": {
+    "dsh": ">=0.2.0 <0.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiciyang/training-rl.git"
+  }
+}
