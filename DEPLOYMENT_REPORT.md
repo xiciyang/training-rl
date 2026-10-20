@@ -80,7 +80,7 @@ node bin/training-rl.mjs health --json | head -40
 
 | 项 | 值 |
 |---|---|
-| 主机 / GPU | `thinkstationpgx-3269` / NVIDIA GB10，`deviceCapability=[12,1]`（sm_121） |
+| 主机 / GPU | `<host>` / NVIDIA GB10，`deviceCapability=[12,1]`（sm_121） |
 | 驱动 / 镜像 | 580.126.09 / `training-rl/smoke-toolchain:0.1.0`（torch 2.11.0+cu130、transformers 5.17.0、trl 1.14.0、peft 0.21.0） |
 | 基座 | `<BASE_MODEL>`（只读挂载，全程哈希不变） |
 | prompt 集 | 400 训练 / 200 留出，来自 `yahma-alpaca-cleaned`（CC BY 4.0）经 data-core 去泄漏的既有切分；本层双轨复核 `hashOverlap=0`、`substringContained=0` |
