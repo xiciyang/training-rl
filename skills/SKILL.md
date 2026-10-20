@@ -30,7 +30,7 @@ description: RL（GRPO）训练侧插件——规则奖励 + β 可推导（β=�
 ### ① 奖励是**规则函数**，不是偏好数据
 
 `Anthropic/hh-rlhf` 卡片正文**限定用途**；`Dahoas/rm-static` **完全未声明 license**；
-本机 `/data/models` 下无 reward model ⇒ 偏好对/RM 路径**整体关闭**。
+本地模型根目录下无 reward model ⇒ 偏好对/RM 路径**整体关闭**。
 规则奖励带**显式版本号**（`rule-reward@1`）：改规则 = 改实验。
 
 规则实现有**两处**（容器内 Python 逐批打分 / Node 侧评估打分），这是刻意接受的：
@@ -118,7 +118,7 @@ node bin/training-rl.mjs health --json    # 只读自检（CLI 故意不提供 t
 ## 真机主 run 怎么跑（手动，带确认令牌）
 
 ```js
-import * as api from '/home/xiciyang/deepseek_harness/inference-training/training-rl/src/core.mjs'
+import * as api from '<repo>/src/core.mjs'
 const p = await api.prepare({ sourceDatasetDir: '~/.ai-infra/state/datasets/yahma-alpaca-cleaned__sft__s20260929__n1000' })
 const r = await api.train({ promptsDir: p.promptsDir, klBudget: 0.1, maxSteps: 200, /* 缺 confirm 会返回 E_CONFIRMATION_REQUIRED + confirmToken */ })
 const v = await api.validate({ runId: r.runId, thresholds: { minRewardGainPct: 5 } })
