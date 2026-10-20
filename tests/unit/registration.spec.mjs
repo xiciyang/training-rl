@@ -15,7 +15,7 @@ import { findLosslessProblems } from '../../src/output.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const PKG = join(HERE, '..', '..')
-const WORKSPACE = '/home/xiciyang/deepseek_harness'
+const WORKSPACE = '<workspace>'
 export const NAME = 'registration（注册路径 / 契约 / 命名空间 / 无损 JSON）'
 
 function strictCtx(sink) {

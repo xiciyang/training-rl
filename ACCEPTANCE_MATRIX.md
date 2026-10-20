@@ -24,7 +24,7 @@
 
 | # | 验收项 | 判据 | 结果 | 证据 |
 |---|---|---|---|---|
-| P0-1 | 真机 GRPO 训练走**本包自己的** `training_rl_train` 路径 | 在 `/data/models/Qwen2.5-0.5B-Instruct` 上跑通，≤500 步、≤2 GPU·h | ✅ `[verified]` **200 步 / 0.0642 GPU·h**（run2 `rl_20260929155357_gr86`）+ **200 步 / 0.0723 GPU·h**（run1 `rl_20260929151620_wxnz`）+ 2 步彩排 0.0022 | `out/rl-vertical-loop.json#train`、`out/rl-rehearsal.json`；审计链 `~/.ai-infra/logs/audit/training-rl/2026-09-29.jsonl` |
+| P0-1 | 真机 GRPO 训练走**本包自己的** `training_rl_train` 路径 | 在 `<BASE_MODEL>` 上跑通，≤500 步、≤2 GPU·h | ✅ `[verified]` **200 步 / 0.0642 GPU·h**（run2 `rl_20260929155357_gr86`）+ **200 步 / 0.0723 GPU·h**（run1 `rl_20260929151620_wxnz`）+ 2 步彩排 0.0022 | `out/rl-vertical-loop.json#train`、`out/rl-rehearsal.json`；审计链 `~/.ai-infra/logs/audit/training-rl/2026-09-29.jsonl` |
 | P0-2 | 端到端 `validate`（serving 部署 → 评估 → 拆解） | 策略 + 基座各租一个临时端点，测完拆解 | ✅ `[verified]` run2 完整走完（`teardown rl: ok=true` / `teardown base: ok=true`）；端点 `http://127.0.0.1:8100` | `out/rl-vertical-loop.v3.json#validate` |
 | P0-3 | 契约冻结，且 **§5.3 的裁决结果（选项 B）**落文档 | 头 `status: frozen`；单体档位/hooks/产物断言/β 口径/已知边界齐备 | ✅ `[verified]` `version: 1.0.1`、`status: frozen`、`frozenAt: 2026-09-29` | `inference-contracts/contracts/training-rl-contract.md` |
 | P0-4 | `run-all.mjs` 0 失败 | 全部检查通过 | ✅ `[verified]` **合计 117/117，未过 0** | 命令与输出见 §5 |
@@ -117,7 +117,7 @@ node tests/realmachine/worker-protocol.spec.mjs
 # → PASS: worker-protocol（真容器 node:20-alpine，CPU-only）
 
 # ④ 契约一致性（含 C13d 对 frozen 契约证据路径的存在性校验、C22 training-rl 组）
-cd /home/xiciyang/deepseek_harness
+cd <workspace>
 node inference-contracts/checks/run-all.mjs
 # → 合计 117/117，未过 0
 

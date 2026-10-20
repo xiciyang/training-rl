@@ -139,7 +139,7 @@ try {
     const t0 = Date.now()
     const r = await withConfirm(api.train, {
       promptsDir,
-      baseModel: '/data/models/Qwen2.5-0.5B-Instruct',
+      baseModel: '<BASE_MODEL>',
       klBudget: KL_BUDGET,
       klTolerancePct: KL_TOL,
       lr: Number(argOf('--lr', '1e-6')),

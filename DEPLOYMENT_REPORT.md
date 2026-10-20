@@ -31,11 +31,11 @@
 
 ```bash
 # ① 依赖（六个共享库走 file: 声明；本机已建好 junction，重装也安全）
-cd /home/xiciyang/deepseek_harness/inference-training/training-rl
+cd <repo>
 npm install --no-audit --no-fund        # 只需 file: 依赖，无网络需求
 
 # ② 常驻挂载（与本项目训练侧既有做法一致：运行时注入，不改 profile）
-#    dev_inject_plugin  dir=/home/xiciyang/deepseek_harness/inference-training/training-rl
+#    dev_inject_plugin  dir=<repo>
 # ⚠️ 本机实测：本会话内注入会失败（见 §6 已知问题 1），需先重启 DSH 让长驻进程重新加载升级后的共享库。
 
 # ③ 只读自检（随时可跑，不写共享状态）
@@ -82,7 +82,7 @@ node bin/training-rl.mjs health --json | head -40
 |---|---|
 | 主机 / GPU | `thinkstationpgx-3269` / NVIDIA GB10，`deviceCapability=[12,1]`（sm_121） |
 | 驱动 / 镜像 | 580.126.09 / `training-rl/smoke-toolchain:0.1.0`（torch 2.11.0+cu130、transformers 5.17.0、trl 1.14.0、peft 0.21.0） |
-| 基座 | `/data/models/Qwen2.5-0.5B-Instruct`（只读挂载，全程哈希不变） |
+| 基座 | `<BASE_MODEL>`（只读挂载，全程哈希不变） |
 | prompt 集 | 400 训练 / 200 留出，来自 `yahma-alpaca-cleaned`（CC BY 4.0）经 data-core 去泄漏的既有切分；本层双轨复核 `hashOverlap=0`、`substringContained=0` |
 | GPU 串行纪律 | 先等 `out/lt4-seed-retrospect-raw.json` 出现（23:09）再开跑；两次 main run 之间不并发 |
 
@@ -152,7 +152,7 @@ node tests/realmachine/reward-conformance.mjs
 node tests/realmachine/worker-protocol.spec.mjs        # → PASS
 
 # 4) 契约一致性（含 C13d frozen 证据路径、C22 training-rl 组）
-cd /home/xiciyang/deepseek_harness && node inference-contracts/checks/run-all.mjs
+cd <workspace> && node inference-contracts/checks/run-all.mjs
 #   → 合计 117/117，未过 0
 
 # 5) 契约 §10 与证据同源

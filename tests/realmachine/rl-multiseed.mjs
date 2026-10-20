@@ -269,7 +269,7 @@ try {
     let r = null
     try {
       r = await withConfirm(api.train, {
-        promptsDir, baseModel: '/data/models/Qwen2.5-0.5B-Instruct',
+        promptsDir, baseModel: '<BASE_MODEL>',
         klBudget: KL_BUDGET, klTolerancePct: KL_TOL,
         lr: TRAIN_CONFIG.lr, batchSize: TRAIN_CONFIG.batchSize, gradAccum: TRAIN_CONFIG.gradAccum,
         numGenerations: TRAIN_CONFIG.numGenerations, maxCompletionLength: TRAIN_CONFIG.maxCompletionLength,

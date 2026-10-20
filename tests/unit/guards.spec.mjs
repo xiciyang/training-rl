@@ -67,17 +67,17 @@ export async function run(t) {
   t.assert(prep.license?.spdx === 'cc-by-4.0', 'prepare 继承上游 license')
   t.assert(prep.reward?.kind === 'rule' && prep.reward?.version === 'rule-reward@1', 'prepare 回报奖励来源与版本')
 
-  r = await attempts(() => api.train({ root, promptsDir: prep.promptsDir, baseModel: '/data/models/Qwen2.5-0.5B-Instruct' }))
+  r = await attempts(() => api.train({ root, promptsDir: prep.promptsDir, baseModel: '<BASE_MODEL>' }))
   t.assert(r.ok === false && r.code === ERROR_CODES.E_KL_BUDGET_REQUIRED, `2) 缺 klBudget → E_KL_BUDGET_REQUIRED（实际 ${r.code}）`)
-  r = await attempts(() => api.train({ root, promptsDir: prep.promptsDir, baseModel: '/data/models/Qwen2.5-0.5B-Instruct', klBudget: 0 }))
+  r = await attempts(() => api.train({ root, promptsDir: prep.promptsDir, baseModel: '<BASE_MODEL>', klBudget: 0 }))
   t.assert(r.ok === false && r.code === ERROR_CODES.E_KL_BUDGET_REQUIRED, '2b) klBudget=0 → 仍拒绝（β 会是 Infinity）')
-  r = await attempts(() => api.train({ root, promptsDir: prep.promptsDir, baseModel: '/data/models/Qwen2.5-0.5B-Instruct', klBudget: -1 }))
+  r = await attempts(() => api.train({ root, promptsDir: prep.promptsDir, baseModel: '<BASE_MODEL>', klBudget: -1 }))
   t.assert(r.ok === false && r.code === ERROR_CODES.E_KL_BUDGET_REQUIRED, '2c) klBudget<0 → 仍拒绝')
 
   // 3) 参数越界（步数/GPU 小时超上限）
-  r = await attempts(() => api.train({ root, promptsDir: prep.promptsDir, baseModel: '/data/models/Qwen2.5-0.5B-Instruct', klBudget: 0.1, maxSteps: 9999 }))
+  r = await attempts(() => api.train({ root, promptsDir: prep.promptsDir, baseModel: '<BASE_MODEL>', klBudget: 0.1, maxSteps: 9999 }))
   t.assert(r.ok === false && r.code === ERROR_CODES.E_BUDGET_EXCEEDED, `3) maxSteps=9999 → E_BUDGET_EXCEEDED（实际 ${r.code}）`)
-  r = await attempts(() => api.train({ root, promptsDir: prep.promptsDir, baseModel: '/data/models/Qwen2.5-0.5B-Instruct', klBudget: 0.1, limits: { maxGpuHours: 5 } }))
+  r = await attempts(() => api.train({ root, promptsDir: prep.promptsDir, baseModel: '<BASE_MODEL>', klBudget: 0.1, limits: { maxGpuHours: 5 } }))
   t.assert(r.ok === false && r.code === ERROR_CODES.E_BUDGET_EXCEEDED, '3b) maxGpuHours>2 → E_BUDGET_EXCEEDED')
 
   // 4) 基座模型不存在
